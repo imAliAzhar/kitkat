@@ -1,0 +1,70 @@
+name: Telegram Webhook
+
+on:
+  workflow_dispatch:
+    inputs:
+      message_text:
+        description: 'Message text from Telegram'
+        required: false
+        type: string
+      user_id:
+        description: 'Telegram user ID'
+        required: false
+        type: string
+      username:
+        description: 'Telegram username'
+        required: false
+        type: string
+      first_name:
+        description: 'User first name'
+        required: false
+        type: string
+      chat_id:
+        description: 'Telegram chat ID'
+        required: false
+        type: string
+      message_id:
+        description: 'Telegram message ID'
+        required: false
+        type: string
+      timestamp:
+        description: 'Message timestamp'
+        required: false
+        type: string
+      triggered_by:
+        description: 'What triggered this action'
+        required: false
+        type: string
+
+jobs:
+  handle-webhook:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup Deno
+      uses: denoland/setup-deno@v2
+      with:
+        deno-version: v2.x
+    
+    - name: Log incoming message
+      run: |
+        echo "Telegram message received!"
+        echo "Message: ${{ github.event.inputs.message_text }}"
+        echo "From user: ${{ github.event.inputs.username }} (${{ github.event.inputs.first_name }})"
+        echo "User ID: ${{ github.event.inputs.user_id }}"
+        echo "Chat ID: ${{ github.event.inputs.chat_id }}"
+        echo "Timestamp: ${{ github.event.inputs.timestamp }}"
+        
+    - name: Process incoming message
+      run: |
+        ./kitkat
+      env:
+        MESSAGE_TEXT: ${{ github.event.inputs.message_text }}
+        USERNAME: ${{ github.event.inputs.username }}
+        FIRST_NAME: ${{ github.event.inputs.first_name }}
+        USER_ID: ${{ github.event.inputs.user_id }}
+        CHAT_ID: ${{ github.event.inputs.chat_id }}
+        TIMESTAMP: ${{ github.event.inputs.timestamp }}

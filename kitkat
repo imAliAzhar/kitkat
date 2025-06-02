@@ -1,0 +1,7 @@
+#!/bin/sh
+
+deno run \
+  --env-file \
+  --allow-env \
+  main.ts
+
